@@ -102,7 +102,6 @@
                         var val = selectorArr[i],
                             key = i;
                         if(!val.match(/\S+=\S+/)) {
-                            console.log(val);
                             debug("warn", "选择器\"" + selector + "\" 错误");
                             break;
                         }
@@ -165,6 +164,7 @@
                     else if(typeof selector === "string") {
                         arr = data[1];
                     }
+                    data = _self.select(table)[0];
                     arr.forEach(function(val, key, arr){
                         var num = val - key;
                         data.splice(num, 1);
