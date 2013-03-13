@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8" />
     <title></title>
 </head>
 <body>
@@ -10,6 +11,65 @@
         a : 1,
         b : 2
     });
+
+    function runningTime(id, callback) {
+        console.time(id);
+        //var date = new Date();
+        callback();
+        //console.log(new Date() - date);
+        console.timeEnd(id);
+    }
+
+    runningTime("time_select", function() {
+        for(var i = 19; i--; ) {
+            window.data1 = ld.select("test_arr", "*");
+        }
+    });
+
+    runningTime("time_local", function() {
+        for(var i = 19; i--; ) {
+            window.data2 = JSON.parse(localStorage["test_arr"]);
+        }
+    });
+
+    /*runningTime("time_for_unshif", function() {
+        for(var j = 999999; j--; ) {
+            window.arr1 = [];
+            for(var i = window.data1.length; i --; ) {
+                window.arr1.unshift(i);
+            }
+        }
+    });*/
+
+    runningTime("time_for_push", function() {
+        for(var j = 9999; j--; ) {
+            window.arr1 = [];
+            for(var i = 0, len = window.data1.length; i < len; i++) {
+                window.arr1.push(i);
+            }
+        }
+    });
+
+    /*runningTime("time_each_push", function() {
+        var each = window.each;
+        for(var j = 9999; j--; ) {
+            window.arr1 = [];
+            window.each(window.data1, function(val, key){
+                window.arr1.push(key);
+            });
+        }
+    });*/
+
+    /*runningTime("time_forEach", function() {
+        for(var j = 999999; j--; ) {
+            window.arr2 = [];
+            window.data1.forEach(function(val, key, arr) {
+                window.arr2.push(key);
+            });
+        }
+    });*/
+
+
 </script>
 </body>
 </html>

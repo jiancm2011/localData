@@ -17,6 +17,12 @@
             return isDebug ? function(command, str) { console[command]("[LocalData]: " + str); } : function () {};
         }(true);
 
+        function each(arr, callback) {
+            for(var i = 0, len = arr.length; i < len; i++) {
+                callback(arr[i], i);
+            }
+        }
+
         function extend(target){
             [].slice.call(arguments, 1).forEach(function(source) {
                 for (key in source) {
@@ -74,7 +80,7 @@
 
                 if(selector === "*" || selector === undefined) {
                     result[0] = data;
-                    data.forEach(function(val, key, arr) {
+                    each(data, function(val, key) {
                         result[1].push(key);
                     });
                 }
@@ -85,7 +91,7 @@
                 }
                 // selector为Array类型
                 else if(selector instanceof Array) {
-                    selector.forEach(function(val, key, arr) {
+                    each(selector, function(val, key) {
                         result[0].push(data[val]);
                         result[1].push(val);
                     });
@@ -108,13 +114,14 @@
                         index = val.split("=")[0];
                         value = val.split("=")[1];
                         if(key == 0) {
-                            data.forEach(function(val, key, arr) {
+                            each(data, function(val, key) {
                                 if(val[index] == value) {
                                     arr1.push(key);
                                 }
                             });
+                            //for(var j = 0, l = )
                         } else {
-                            arr1.forEach(function(val, key, arr) {
+                            each(arr1, function(val, key) {
                                 if(data[val][index] == value) {
                                     arr2.push(val);
                                 }
@@ -124,9 +131,9 @@
                         }
                     }
 
-                    arr1.forEach(function(val, key, arr) {
+                    each(arr1, function(val, key) {
                         result[0].push(data[val]);
-                    });
+                    })
                     result[1] = arr1;
                 }
                 return result;
@@ -165,7 +172,7 @@
                         arr = data[1];
                     }
                     data = _self.select(table)[0];
-                    arr.forEach(function(val, key, arr){
+                    each(arr, function(val, key){
                         var num = val - key;
                         data.splice(num, 1);
                     });
@@ -187,7 +194,7 @@
                     return false;
                 }
                 if(obj.push) {
-                    obj.forEach(function(val, key, arr) {
+                    each(obj, function(val, key) {
                         data[0].push(val);
                     });
                 } else {
@@ -209,18 +216,30 @@
                 var data = JSON.parse(localStorage[table]),
                     result = _self.select(table, selector);
                 if(result[1].length > 1) {
-                    debug("warn", "匹配结果大于1");
+                    debug("error", "匹配结果大于1");
                     return false;
                 }
-                var arr = obj.split(","),
-                    key = result[1][0],
-                    index = "",
-                    value = "";
-                for(var i = 0; i < arr.length; i++) {
-                    index = arr[i].split("=")[0];
-                    value = arr[i].split("=")[1];
-                    data[key][index] = value;
+                var key = result[1][0];
+                // obj为String类型
+                if(typeof obj === "string") {
+                    var arr = obj.split(","),
+                        index = "",
+                        value = "";
+                    for(var i = 0; i < arr.length; i++) {
+                        index = arr[i].split("=")[0];
+                        value = arr[i].split("=")[1];
+                        data[key][index] = value;
+                    }
                 }
+                // obj为Object类型
+                else if(obj.constructor === Object) {
+                    extend(data[key], obj);
+                }
+                else {
+                    debug("error", "插入参数格式不符");
+                    return false;
+                }
+
                 localStorage[table] = JSON.stringify(data);
                 return true;
             }
