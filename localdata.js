@@ -1,9 +1,9 @@
 /**
- * LocalData v0.3.0
+ * LocalData v0.3.1
  * 一个结构化localStorage数据的简易操作库
  * Author: Maple Jan
  * E-mail: jiancm2001@gmail.com
- * Date: 13-3-6
+ * Date: 13-3-13
  */
 
 (function(w) {
