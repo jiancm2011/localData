@@ -141,12 +141,12 @@
 
             /**
              * 删除localStorage中指定item的匹配属性
-             * delete(table, selector)
+             * remove(table, selector)
              * @param {String} table 表名
              * @param selector 选择器
              * @returns {Boolean}
              */
-            delete: function(table, selector) {
+            remove: function(table, selector) {
                 var data = _self.select(table, selector);
 
                 // localStorage不存在该item
