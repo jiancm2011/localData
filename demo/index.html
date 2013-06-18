@@ -12,6 +12,13 @@
         b : 2
     });
 
+    var arr = [];
+    for(var i = 999; i--; ) {
+        arr.push(i);
+    }
+
+    ld.create("arr", arr);
+
     function runningTime(id, callback) {
         console.time(id);
         //var date = new Date();
